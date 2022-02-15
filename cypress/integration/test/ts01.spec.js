@@ -1,0 +1,236 @@
+const token = "db6b057e5180142536d4aecda615b59f702f64ad7a7f10cf2881eb62d59e6f68"
+
+
+describe("TestSuite01", () => {
+    it('Scenario 01', function () {
+        cy.request({
+            method: "GET",
+            url: "https://gorest.co.in/public/v2/users/",
+        }).then(response => {
+            console.log(response.body)
+            expect(response.status).to.be.eq(200)
+            expect(response.body).to.have.length(20)
+        });
+    });
+
+    it('Scenario 02', function () {
+        let date = new Date()
+        let mail = `test${date.getMilliseconds()}@mail.com`
+
+        cy.request({
+            headers: {
+                "Authorization": `Bearer ${token}`
+            },
+
+            method: "POST",
+            url: "https://gorest.co.in/public/v2/users",
+            body: {
+                "name": `Jhon Jones`,
+                "email": mail,
+                "gender": "male",
+                "status": "active"
+            },
+        }).then(response => {
+            expect(response.status).to.be.eq(201)
+
+            let id = response.body.id
+            let main = response.body.email
+            let name = response.body.name
+            let gender = response.body.gender
+            let status = response.body.status
+
+            cy.request({
+                headers: {
+                    "Authorization": `Bearer ${ token }`
+                },
+
+                method: "GET",
+                url: `https://gorest.co.in/public/v2/users/${ id }`
+
+            }).then(assert => {
+                console.log(assert.body)
+                expect(assert.status).to.be.eq(200)
+                expect(assert.body.name).to.be.eq(name)
+                expect(assert.body.email).to.be.eq(main)
+                expect(assert.body.gender).to.be.eq(gender)
+                expect(assert.body.status).to.be.eq(status)
+
+
+                cy.request({
+                    headers: {
+                        "Authorization": `Bearer ${ token }`
+                    },
+
+                    method: "DELETE",
+                    url: `https://gorest.co.in/public/v2/users/${ id }`
+                }).then(response => {
+                    expect(response.status).to.be.eq(204)
+                })
+            });
+        });
+    });
+
+    it('Scenario 03', function () {
+        cy.request({
+            headers: {
+                "Authorization": `Bearer ${ token }`
+            },
+
+            method: "POST",
+            url: `https://gorest.co.in/public/v2/users`,
+            body: {
+                "name": "Test",
+                "email": "test46789@mail.com",
+                "gender": "male",
+                "status": "active"
+            }
+        }).then(response => {
+            expect(response.status).to.be.eq(201)
+
+            cy.request({
+                headers: {
+                    "Authorization": `Bearer ${ token }`
+                },
+
+                method: "PATCH",
+                body: {
+                    "name": "NewTest",
+                    "email": "test46789@mail.com",
+                    "status": "active"
+                },
+                url: `https://gorest.co.in/public/v2/users/${ response.body.id }`
+            }).then(response => {
+                expect(response.status).to.be.eq(200)
+                expect(response.body.name).to.be.eq("NewTest")
+
+                cy.request({
+                    headers: {
+                        "Authorization": `Bearer ${ token }`
+                    },
+
+                    method: "DELETE",
+                    url: `https://gorest.co.in/public/v2/users/${ response.body.id }`
+                }).then(response => {
+                    expect(response.status).to.be.eq(204)
+                })
+            })
+        })
+    });
+
+    it('Scenario04', function () {
+        cy.request({
+            headers: {
+                "Authorization": `Bearer ${ token }`
+            },
+
+            method: "POST",
+            url: "https://gorest.co.in/public/v2/users",
+            body: {
+                "name": "Markeloff",
+                "gender": "male",
+                "email": "mark.ell@mail.com",
+                "status": "active"
+            }
+        }).then(response => {
+            expect(response.status).to.be.eq(201)
+
+            cy.request({
+                headers: {
+                    "Authorization": `Bearer ${ token }`
+                },
+
+                method: "PATCH",
+                url: `https://gorest.co.in/public/v2/users/${ response.body.id }`,
+                body: {
+                    "name": "Markeloff",
+                    "gender": "male",
+                    "email": "mark.ell@mail.com",
+                    "status": "inactive"
+                }
+            }).then(response => {
+                expect(response.status).to.be.eq(200)
+                expect(response.body.status).to.be.eq("inactive")
+
+                cy.request({
+                    headers: {
+                        "Authorization": `Bearer ${ token }`
+                    },
+
+                    method: "DELETE",
+                    url: `https://gorest.co.in/public/v2/users/${ response.body.id }`
+                }).then(response => {
+                    expect(response.status).to.be.eq(204)
+                })
+            })
+        })
+    });
+
+    it('Scenario 05', function () {
+        cy.request({
+            headers: {
+                "Authorization": `Bearer ${ token }`
+            },
+
+            method: "POST",
+            url: "https://gorest.co.in/public/v2/users",
+            body: {
+                "name": "Jan Duda",
+                "gender": "male",
+                "email": "janduda.du@mail.com",
+                "status": "active"
+            }
+        }).then(response => {
+            expect(response.status).to.be.eq(201)
+
+            cy.request({
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+
+                method: "PUT",
+                url: `https://gorest.co.in/public/v2/users/${response.body.id}`,
+                body: {
+                    "name": "Januzay Duda",
+                    "gender": "female",
+                    "email": "janu.du@mail.com",
+                    "status": "inactive"
+                }
+            }).then(response => {
+                expect(response.status).to.be.eq(200)
+                expect(response.body.status).to.be.eq("inactive")
+                expect(response.body.name).to.be.eq("Januzay Duda")
+
+                cy.request({
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                    },
+
+                    method: "DELETE",
+                    url: `https://gorest.co.in/public/v2/users/${response.body.id}`,
+                }).then(response => {
+                    expect(response.status).to.be.eq(204)
+                })
+            })
+        })
+    });
+
+    it('Scenario 06', function () {
+        cy.request({
+            headers: {
+                "Authorization": `Bearer ${ token + 1}`
+            },
+
+            method: "POST",
+            url: "https://gorest.co.in/public/v2/users",
+            body: {
+                "name": "Jan Duda",
+                "gender": "male",
+                "email": "janduda.du@mail.com",
+                "status": "active"
+            }
+        }).then(response => {
+            expect(response.status).to.be.eq(401)
+            expect(response.body.message).to.be.eq("Authentication failed")
+        })
+    });
+});
