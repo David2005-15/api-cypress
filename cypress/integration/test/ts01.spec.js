@@ -316,7 +316,6 @@ describe("TestSuite01", () => {
                 status: 'active'
             },
         }).then(response => {
-            console.log(response.body)
             expect(response.status).to.be.eq(201)
         })
     });
@@ -330,7 +329,6 @@ describe("TestSuite01", () => {
             method: "GET",
             url: "https://gorest.co.in/public/v2/users"
         }).then(response => {
-            console.log(response.body)
             expect(response.status).to.be.eq(200)
         })
     });
@@ -362,7 +360,6 @@ describe("TestSuite01", () => {
                 url: `https://gorest.co.in/public/v2/users/${id}`
             }).then(response => {
                 expect(response.status).to.be.eq(404)
-                console.log(response.body)
                 expect(response.body.message).to.be.eq("Resource not found")
             })
         })
