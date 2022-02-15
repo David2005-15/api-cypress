@@ -1,5 +1,7 @@
-const token = "db6b057e5180142536d4aecda615b59f702f64ad7a7f10cf2881eb62d59e6f68"
+import {Common} from "../../Scenario/common";
 
+
+const token = "db6b057e5180142536d4aecda615b59f702f64ad7a7f10cf2881eb62d59e6f68"
 
 describe("TestSuite01", () => {
     it('Scenario 01', function () {
@@ -7,9 +9,8 @@ describe("TestSuite01", () => {
             method: "GET",
             url: "https://gorest.co.in/public/v2/users/",
         }).then(response => {
-            console.log(response.body)
-            expect(response.status).to.be.eq(200)
-            expect(response.body).to.have.length(20)
+            Common().assert().checkEqual(response.status, 200)
+            Common().assert().haveLength(response.body, 20)
         });
     });
 
@@ -31,10 +32,11 @@ describe("TestSuite01", () => {
                 "status": "active"
             },
         }).then(response => {
-            expect(response.status).to.be.eq(201)
+            // expect(response.status).to.be.eq(201)
+            Common().assert().checkEqual(response.status, 201)
 
             let id = response.body.id
-            let main = response.body.email
+            let mail = response.body.email
             let name = response.body.name
             let gender = response.body.gender
             let status = response.body.status
@@ -48,12 +50,11 @@ describe("TestSuite01", () => {
                 url: `https://gorest.co.in/public/v2/users/${ id }`
 
             }).then(assert => {
-                console.log(assert.body)
-                expect(assert.status).to.be.eq(200)
-                expect(assert.body.name).to.be.eq(name)
-                expect(assert.body.email).to.be.eq(main)
-                expect(assert.body.gender).to.be.eq(gender)
-                expect(assert.body.status).to.be.eq(status)
+                Common().assert().checkEqual(assert.status, 200)
+                Common().assert().checkEqual(assert.body.name, name)
+                Common().assert().checkEqual(assert.body.email, mail)
+                Common().assert().checkEqual(assert.body.gender, gender)
+                Common().assert().checkEqual(assert.body.status, status)
 
 
                 cy.request({
@@ -64,7 +65,8 @@ describe("TestSuite01", () => {
                     method: "DELETE",
                     url: `https://gorest.co.in/public/v2/users/${ id }`
                 }).then(response => {
-                    expect(response.status).to.be.eq(204)
+                    // expect(response.status).to.be.eq(204)
+                    Common().assert().checkEqual(response.status, 204)
                 })
             });
         });
@@ -85,7 +87,8 @@ describe("TestSuite01", () => {
                 "status": "active"
             }
         }).then(response => {
-            expect(response.status).to.be.eq(201)
+            // expect(response.status).to.be.eq(201)
+            Common().assert().checkEqual(response.status, 201)
 
             cy.request({
                 headers: {
@@ -100,8 +103,10 @@ describe("TestSuite01", () => {
                 },
                 url: `https://gorest.co.in/public/v2/users/${ response.body.id }`
             }).then(response => {
-                expect(response.status).to.be.eq(200)
-                expect(response.body.name).to.be.eq("NewTest")
+                // expect(response.status).to.be.eq(200)
+                // expect(response.body.name).to.be.eq("NewTest")
+                Common().assert().checkEqual(response.status, 200)
+                Common().assert().checkEqual(response.body.name, "NewTest")
 
                 cy.request({
                     headers: {
@@ -111,7 +116,7 @@ describe("TestSuite01", () => {
                     method: "DELETE",
                     url: `https://gorest.co.in/public/v2/users/${ response.body.id }`
                 }).then(response => {
-                    expect(response.status).to.be.eq(204)
+                    Common().assert().checkEqual(response.status, 204)
                 })
             })
         })
@@ -132,7 +137,8 @@ describe("TestSuite01", () => {
                 "status": "active"
             }
         }).then(response => {
-            expect(response.status).to.be.eq(201)
+            // expect(response.status).to.be.eq(201)
+            Common().assert().checkEqual(response.status, 201)
 
             cy.request({
                 headers: {
@@ -148,8 +154,10 @@ describe("TestSuite01", () => {
                     "status": "inactive"
                 }
             }).then(response => {
-                expect(response.status).to.be.eq(200)
-                expect(response.body.status).to.be.eq("inactive")
+                // expect(response.status).to.be.eq(200)
+                // expect(response.body.status).to.be.eq("inactive")
+                Common().assert().checkEqual(response.status, 200)
+                Common().assert().checkEqual(response.body.status, "inactive")
 
                 cy.request({
                     headers: {
@@ -159,7 +167,8 @@ describe("TestSuite01", () => {
                     method: "DELETE",
                     url: `https://gorest.co.in/public/v2/users/${ response.body.id }`
                 }).then(response => {
-                    expect(response.status).to.be.eq(204)
+                    // expect(response.status).to.be.eq(204)
+                    Common().assert().checkEqual(response.status, 204)
                 })
             })
         })
@@ -183,7 +192,8 @@ describe("TestSuite01", () => {
                 "status": "active"
             }
         }).then(response => {
-            expect(response.status).to.be.eq(201)
+            // expect(response.status).to.be.eq(201)
+            Common().assert().checkEqual(response.status, 201)
 
             cy.request({
                 headers: {
@@ -199,9 +209,12 @@ describe("TestSuite01", () => {
                     "status": "inactive"
                 }
             }).then(response => {
-                expect(response.status).to.be.eq(200)
-                expect(response.body.status).to.be.eq("inactive")
-                expect(response.body.name).to.be.eq("Januzay Duda")
+                // expect(response.status).to.be.eq(200)
+                // expect(response.body.status).to.be.eq("inactive")
+                // expect(response.body.name).to.be.eq("Januzay Duda")
+                Common().assert().checkEqual(response.status, 200)
+                Common().assert().checkEqual(response.body.status, "inactive")
+                Common().assert().checkEqual(response.body.name, "Januzay Duda")
 
                 cy.request({
                     headers: {
@@ -211,7 +224,8 @@ describe("TestSuite01", () => {
                     method: "DELETE",
                     url: `https://gorest.co.in/public/v2/users/${response.body.id}`,
                 }).then(response => {
-                    expect(response.status).to.be.eq(204)
+                    // expect(response.status).to.be.eq(204)
+                    Common().assert().checkEqual(response.status, 204)
                 })
             })
         })
@@ -232,8 +246,10 @@ describe("TestSuite01", () => {
                 "status": "active"
             }
         }).then(err => {
-            expect(err.status).to.be.eq(401)
-            expect(err.body.message).to.be.eq("Authentication failed")
+            // expect(err.status).to.be.eq(401)
+            // expect(err.body.message).to.be.eq("Authentication failed")
+            Common().assert().checkEqual(err.status, 401)
+            Common().assert().checkEqual(err.body.message, "Authentication failed")
         })
     });
 
@@ -252,9 +268,10 @@ describe("TestSuite01", () => {
                 "status": "active"
             }
         }).then(response => {
-            console.log(response.body[0])
-            expect(response.body[0].message).to.be.eq("is invalid")
-            expect(response.status).to.be.eq(422)
+            // expect(response.body[0].message).to.be.eq("is invalid")
+            // expect(response.status).to.be.eq(422)
+            Common().assert().checkEqual(response.body[0].message, "is invalid")
+            Common().assert().checkEqual(response.status, 422)
         })
     });
 
@@ -273,8 +290,10 @@ describe("TestSuite01", () => {
                "status": "invalid activity"
            }
        }).then(response => {
-           expect(response.status).to.be.eq(422)
-           expect(response.body[0].message).to.be.eq("can't be blank")
+           // expect(response.status).to.be.eq(422)
+           // expect(response.body[0].message).to.be.eq("can't be blank")
+           Common().assert().checkEqual(response.status, 422)
+           Common().assert().checkEqual(response.body[0].message, "can't be blank")
        })
     });
 
@@ -293,8 +312,8 @@ describe("TestSuite01", () => {
                 "status": "active"
             }
         }).then(response => {
-            expect(response.status).to.be.eq(422)
-            expect(response.body[0].message).to.be.eq("can't be blank")
+            Common().assert().checkEqual(response.status, 422)
+            Common().assert().checkEqual(response.body[0].message, "can't be blank")
         })
     });
 
@@ -316,7 +335,8 @@ describe("TestSuite01", () => {
                 status: 'active'
             },
         }).then(response => {
-            expect(response.status).to.be.eq(201)
+            // expect(response.status).to.be.eq(201)
+            Common().assert().checkEqual(response.status, 201)
         })
     });
 
@@ -329,7 +349,8 @@ describe("TestSuite01", () => {
             method: "GET",
             url: "https://gorest.co.in/public/v2/users"
         }).then(response => {
-            expect(response.status).to.be.eq(200)
+            // expect(response.status).to.be.eq(200)
+            Common().assert().checkEqual(response.status, 200)
         })
     });
 
@@ -351,7 +372,8 @@ describe("TestSuite01", () => {
                 "status": "active"
             }
         }).then(response => {
-            expect(response.status).to.be.eq(201)
+            // expect(response.status).to.be.eq(201)
+            Common().assert().checkEqual(response.status, 201)
             let id = response.body.id
 
             cy.request({
@@ -359,8 +381,10 @@ describe("TestSuite01", () => {
                 method: "GET",
                 url: `https://gorest.co.in/public/v2/users/${id}`
             }).then(response => {
-                expect(response.status).to.be.eq(404)
-                expect(response.body.message).to.be.eq("Resource not found")
+                // expect(response.status).to.be.eq(404)
+                // expect(response.body.message).to.be.eq("Resource not found")
+                Common().assert().checkEqual(response.status, 404)
+                Common().assert().checkEqual(response.body.message, "Resource not found")
             })
         })
     });
